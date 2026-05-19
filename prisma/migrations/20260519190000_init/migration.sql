@@ -1,13 +1,17 @@
+CREATE TYPE "TaskStatus" AS ENUM ('pending', 'completed', 'carried_over', 'overdue');
+CREATE TYPE "TaskType" AS ENUM ('today', 'tomorrow', 'scheduled', 'backlog');
+CREATE TYPE "Priority" AS ENUM ('low', 'medium', 'high');
+
 CREATE TABLE "Task" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
-    "status" TEXT NOT NULL DEFAULT 'pending',
-    "type" TEXT NOT NULL DEFAULT 'today',
+    "status" "TaskStatus" NOT NULL DEFAULT 'pending',
+    "type" "TaskType" NOT NULL DEFAULT 'today',
     "dueDate" TIMESTAMP(3),
     "plannedForDate" TIMESTAMP(3),
     "category" TEXT,
-    "priority" TEXT NOT NULL DEFAULT 'medium',
+    "priority" "Priority" NOT NULL DEFAULT 'medium',
     "coinsEarned" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
