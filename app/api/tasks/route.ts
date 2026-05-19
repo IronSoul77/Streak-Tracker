@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { TaskStatus, TaskType } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { dayStart, tomorrowStart } from "@/lib/dates";
-import { applyDailyRollover, parseTaskPayload } from "@/lib/server";
+import { applyDailyRollover, parseTaskPayload, TaskStatus, TaskType } from "@/lib/server";
 
 export async function GET() {
   await applyDailyRollover();
