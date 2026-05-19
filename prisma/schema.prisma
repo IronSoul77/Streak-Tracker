@@ -7,39 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TaskStatus {
-  PENDING      @map("pending")
-  COMPLETED    @map("completed")
-  CARRIED_OVER @map("carried_over")
-  OVERDUE      @map("overdue")
-}
-
-enum TaskType {
-  TODAY     @map("today")
-  TOMORROW  @map("tomorrow")
-  SCHEDULED @map("scheduled")
-  BACKLOG   @map("backlog")
-}
-
-enum Priority {
-  LOW    @map("low")
-  MEDIUM @map("medium")
-  HIGH   @map("high")
-}
-
 model Task {
-  id             String       @id @default(cuid())
+  id             String         @id @default(cuid())
   title          String
   description    String?
-  status         TaskStatus   @default(PENDING)
-  type           TaskType     @default(TODAY)
+  status         String         @default("PENDING")
+  type           String         @default("TODAY")
   dueDate        DateTime?
   plannedForDate DateTime?
   category       String?
-  priority       Priority     @default(MEDIUM)
-  coinsEarned    Int          @default(0)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  priority       String         @default("MEDIUM")
+  coinsEarned    Int            @default(0)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   completedAt    DateTime?
   dailyLogTasks  DailyLogTask[]
 }
