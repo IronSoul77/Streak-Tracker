@@ -1,4 +1,4 @@
-import { PrismaClient, Priority, TaskType } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { addDays, startOfDay } from "date-fns";
 
 const prisma = new PrismaClient();
@@ -27,38 +27,38 @@ async function main() {
         {
           title: "Review today's top priorities",
           description: "Pick the three things that would make today feel successful.",
-          type: TaskType.TODAY,
+          type: "TODAY",
           plannedForDate: today,
           category: "Planning",
-          priority: Priority.HIGH
+          priority: "HIGH"
         },
         {
           title: "Take a focused study block",
           description: "One calm session, timer optional.",
-          type: TaskType.TODAY,
+          type: "TODAY",
           plannedForDate: today,
           category: "Study",
-          priority: Priority.MEDIUM
+          priority: "MEDIUM"
         },
         {
           title: "Outline tomorrow's first task",
-          type: TaskType.TOMORROW,
+          type: "TOMORROW",
           plannedForDate: tomorrow,
           category: "Planning",
-          priority: Priority.LOW
+          priority: "LOW"
         },
         {
           title: "Submit project checkpoint",
-          type: TaskType.SCHEDULED,
+          type: "SCHEDULED",
           dueDate: nextWeek,
           category: "School",
-          priority: Priority.HIGH
+          priority: "HIGH"
         },
         {
           title: "Clean up notes folder",
-          type: TaskType.BACKLOG,
+          type: "BACKLOG",
           category: "Home",
-          priority: Priority.LOW
+          priority: "LOW"
         }
       ]
     });
