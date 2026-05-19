@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TaskStatus {
+  PENDING      @map("pending")
+  COMPLETED    @map("completed")
+  CARRIED_OVER @map("carried_over")
+  OVERDUE      @map("overdue")
+}
+
+enum TaskType {
+  TODAY     @map("today")
+  TOMORROW  @map("tomorrow")
+  SCHEDULED @map("scheduled")
+  BACKLOG   @map("backlog")
+}
+
+enum Priority {
+  LOW    @map("low")
+  MEDIUM @map("medium")
+  HIGH   @map("high")
+}
+
+model Task {
+  id             String       @id @default(cuid())
+  title          String
+  description    String?
+  status         TaskStatus   @default(PENDING)
+  type           TaskType     @default(TODAY)
+  dueDate        DateTime?
+  plannedForDate DateTime?
+  category       String?
+  priority       Priority     @default(MEDIUM)
+  coinsEarned    Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  completedAt    DateTime?
+  dailyLogTasks  DailyLogTask[]
+}
+
+model DailyLog {
+  id                String         @id @default(cuid())
+  date              DateTime       @unique
+  totalTasks        Int
+  completedTasks    Int
+  completionPercent Int
+  streakSuccess     Boolean
+  freezeUsed        Boolean
+  coinsEarned       Int
+  mood              String?
+  learnedText       String?
+  reflectionText    String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  taskSnapshots     DailyLogTask[]
+}
+
+model DailyLogTask {
+  id          String   @id @default(cuid())
+  dailyLogId  String
+  taskId      String?
+  title       String
+  completed   Boolean
+  missed      Boolean
+  coinsEarned Int      @default(0)
+  createdAt   DateTime @default(now())
+  dailyLog    DailyLog @relation(fields: [dailyLogId], references: [id], onDelete: Cascade)
+  task        Task?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
+}
+
+model Wallet {
+  id                  String   @id @default(cuid())
+  coins               Int      @default(0)
+  streakFreezes       Int      @default(0)
+  totalTasksCompleted Int      @default(0)
+  updatedAt           DateTime @updatedAt
+}
+
+model Streak {
+  id                String    @id @default(cuid())
+  currentStreak     Int       @default(0)
+  longestStreak     Int       @default(0)
+  lastCompletedDate DateTime?
+  updatedAt         DateTime  @updatedAt
+}

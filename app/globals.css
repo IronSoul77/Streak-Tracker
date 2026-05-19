@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  background: #fff0f7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: #27333f;
+  background:
+    radial-gradient(circle at top left, rgba(249, 168, 212, 0.42), transparent 34rem),
+    radial-gradient(circle at 88% 12%, rgba(255, 200, 61, 0.24), transparent 28rem),
+    linear-gradient(135deg, #fff0f7 0%, #fff7ed 44%, #fdf2f8 100%);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.card {
+  @apply rounded-3xl border border-pink-100/80 bg-white/90 shadow-soft backdrop-blur;
+}
+
+.focus-ring {
+  @apply focus:outline-none focus:ring-4 focus:ring-pink-200;
+}
