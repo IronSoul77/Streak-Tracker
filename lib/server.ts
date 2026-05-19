@@ -1,4 +1,4 @@
-import { Prisma, TaskStatus, TaskType } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { addDays, subDays } from "date-fns";
 import { prisma } from "@/lib/prisma";
 import { dayStart, isBeforeToday, isToday, isTomorrow, tomorrowStart } from "@/lib/dates";
@@ -7,6 +7,20 @@ export const WALLET_ID = "siri-wallet";
 export const STREAK_ID = "siri-streak";
 export const COINS_PER_TASK = 20;
 export const FREEZE_COST = 100;
+
+export const TaskStatus = {
+  PENDING: "PENDING",
+  COMPLETED: "COMPLETED",
+  CARRIED_OVER: "CARRIED_OVER",
+  OVERDUE: "OVERDUE"
+} as const;
+
+export const TaskType = {
+  TODAY: "TODAY",
+  TOMORROW: "TOMORROW",
+  SCHEDULED: "SCHEDULED",
+  BACKLOG: "BACKLOG"
+} as const;
 
 export async function ensureSingletons() {
   const [wallet, streak] = await Promise.all([
@@ -123,11 +137,11 @@ export function parseTaskPayload(body: Record<string, unknown>) {
     title,
     description: body.description ? String(body.description) : null,
     category: body.category ? String(body.category) : null,
-    priority: (body.priority ?? "MEDIUM") as Prisma.TaskCreateInput["priority"],
-    type: (body.type ?? "TODAY") as Prisma.TaskCreateInput["type"],
+    priority: String(body.priority ?? "MEDIUM"),
+    type: String(body.type ?? "TODAY"),
     dueDate,
     plannedForDate
-  };
+  } satisfies Prisma.TaskCreateInput;
 }
 
 function calculateFinishResult(tasks: Awaited<ReturnType<typeof prisma.task.findMany>>) {
